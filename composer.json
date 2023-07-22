@@ -1,0 +1,26 @@
+{
+    "name": "live-controls/payment",
+    "description": "Payment package for live-controls",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "LiveControls\\Payment\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Roman Wanner",
+            "email": "60240491+daredloco@users.noreply.github.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "LiveControls\\Payment\\LiveControlsServiceProvider"
+            ]
+        }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^7"
+    }
+}
