@@ -1,6 +1,6 @@
 <?php
 
-namespace LiveControls\Payment\Objects\Payments\Iugu;
+namespace LiveControls\Payment\Objects\Iugu;
 
 class PaymentSender
 {

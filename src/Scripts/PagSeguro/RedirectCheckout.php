@@ -1,6 +1,6 @@
 <?php
 
-namespace LiveControls\Payment\Scripts\Payments\PagSeguro;
+namespace LiveControls\Payment\Scripts\PagSeguro;
 
 use Carbon\Carbon;
 use Exception;
