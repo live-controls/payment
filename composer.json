@@ -16,7 +16,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "LiveControls\\Payment\\LiveControlsServiceProvider"
+                "LiveControls\\Payment\\PaymentServiceProvider"
             ]
         }
     },
