@@ -1,5 +1,6 @@
 {
     "name": "live-controls/payment",
+    "license": "MIT",
     "description": "Payment package for live-controls",
     "type": "library",
     "autoload": {
