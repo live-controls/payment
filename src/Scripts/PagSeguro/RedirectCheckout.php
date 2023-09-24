@@ -12,15 +12,22 @@ use SimpleXMLElement;
 
 class RedirectCheckout{
 
+  
     /**
      * Returns an array with 'email' and 'token' depending if the application is in debug mode or not
      *
      * @return array
      */
     private static function getCredentials():array{
+      if(config('app.debug')){
         return [
-            'email' => urlencode(env('PAGSEGURO_EMAIL_DEBUG')),
-            'token' => urlencode(env('PAGSEGURO_TOKEN_DEBUG'))
+          'email' => urlencode(env('PAGSEGURO_EMAIL_DEBUG')),
+          'token' => urlencode(env('PAGSEGURO_TOKEN_DEBUG'))
+      ];
+      }
+        return [
+            'email' => urlencode(env('PAGSEGURO_EMAIL')),
+            'token' => urlencode(env('PAGSEGURO_TOKEN'))
         ];
     }
 

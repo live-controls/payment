@@ -20,7 +20,8 @@ None
 ```ps
 composer require live-controls/payment
 ```
-
+2. Add PAGSEGURO_EMAIL_DEBUG and PAGSEGURO_TOKEN_DEBUG
+3. Add PAGSEGURO_EMAIL and PAGSEGURO_TOKEN
 
 ### Content
 - Transparent Checkout for IUGU (incl. PaymentItem and PaymentSender classes)
