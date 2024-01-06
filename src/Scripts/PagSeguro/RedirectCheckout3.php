@@ -170,15 +170,15 @@ class RedirectCheckout3
     }
 
     public static function getTransactions(Carbon $from, Carbon $to):array{
-
+        throw new Exception('Method not implemented');
     }
 
     public static function reverseTransaction(string $transactionCode, float $amount): bool{
-
+        throw new Exception('Method not implemented');
     }
 
     public static function cancelTransaction(string $transactionCode){
-
+        throw new Exception('Method not implemented');
     }
 
 
