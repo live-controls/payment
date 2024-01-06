@@ -58,9 +58,9 @@ class RedirectCheckout3
     /**
      * Generates a new checkout code for a digital object (without shipping costs)
      *
-     * @return array
+     * @return RedirectCheckoutData
      */
-    public static function generateDigitalCode(array $items, PaymentSender|null $sender, string $reference, Carbon|null $expirationDate, string $redirectUrl, array $notificationUrls = [], array $paymentNotificationUrls = [], array|null $paymentMethods = null, int $discount = 0, int $additionalAmount = 0, string $softDescriptor = "", bool $senderRequired = false):RedirectCheckoutData|false
+    public static function generateDigitalCode(array $items, PaymentSender|null $sender, string $reference, Carbon|null $expirationDate, string $redirectUrl, array $notificationUrls = [], array $paymentNotificationUrls = [], array|null $paymentMethods = null, int $discount = 0, int $additionalAmount = 0, string $softDescriptor = "", bool $senderRequired = false): RedirectCheckoutData
     {
         if($senderRequired && is_null($sender)){
             throw new Exception('$sender is required but it is null!');
