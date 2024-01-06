@@ -113,13 +113,13 @@ class RedirectCheckout3
         }
 
 
-        if($response->getStatusCode() != 200){
+        if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
             throw new Exception($response->getStatusCode().': '.$response->getBody());
         }
         return new RedirectCheckoutData($response->getBody());
     }
 
-    public static function getCheckoutUrl(string $id): string
+    public static function getCheckoutUrl(string $id, bool $offline = false): string
     {
         $token = static::getCredentials()["token"];
         $host = static::getHost();

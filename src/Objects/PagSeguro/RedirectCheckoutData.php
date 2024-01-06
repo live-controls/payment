@@ -26,15 +26,38 @@ class RedirectCheckoutData
     public array $paymentNotificationUrls;
     public string $payLink;
     public string $selfLink;
-    public string $InactivateLink;
+    public string $inactivateLink;
 
     public function __construct(string $jsonResponse)
     {
-        
+        $responseArr = json_decode($jsonResponse);
+        $this->id = $responseArr["id"];
+        $this->referenceId = $responseArr["reference_id"];
+        $this->createdAt = $responseArr["created_at"];
+        $this->status = $responseArr["status"];
+        $this->customer = null; //TODO: Add this
+        $this->customerModifiable = $responseArr["customer_modifiable"];
+        $this->items = json_decode($responseArr["items"]);
+        $this->additionalAmount = $responseArr["additional_amount"];
+        $responseLinks = $responseArr["links"];
+        foreach($responseLinks as $link)
+        {
+            if($link["rel"] == "PAY")
+            {
+                $this->payLink = $link["href"];
+            }elseif($link["rel"] == "SELF")
+            {
+                $this->selfLink = $link["href"];
+            }elseif($link["rel"] == "INACTIVATE")
+            {
+                $this->inactivateLink = $link["href"];
+            }
+        }
+        //TODO: Add the rest of the informations
     }
 
-    public function checkoutUrl()
+    public function checkoutUrl(bool $offline = false)
     {
-        return RedirectCheckout3::getCheckoutUrl($this->id);
+        return RedirectCheckout3::getCheckoutUrl($this->id, $offline);
     }
 }

@@ -6,22 +6,11 @@ class PaymentItem{
     /**
      * PaymentItem to use in RedirectCheckout
      *
-     * @param string $referenceId
+     * @param string $reference_id
      * @param string $name
      * @param string $description
      * @param integer $quantity
-     * @param integer $unitAmount
+     * @param integer $unit_amount
      */
-    public function __construct(public readonly string $referenceId, public readonly string $name, public readonly string $description, public readonly int $quantity, public readonly int $unitAmount){}
-
-    public function __toString()
-    {
-        return json_encode([
-            'reference_id' => $this->referenceId,
-            'name' => $this->name,
-            'description' => $this->description,
-            'quantity' => $this->quantity,
-            'unit_amount' => $this->unitAmount
-        ]);
-    }
+    public function __construct(public readonly string $reference_id, public readonly string $name, public readonly string $description, public readonly int $quantity, public readonly int $unit_amount){}
 }
