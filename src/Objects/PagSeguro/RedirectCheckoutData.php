@@ -45,7 +45,7 @@ class RedirectCheckoutData
         $this->paymentMethodsConfigs = []; //TODO: Add this
         $this->softDescriptor = $responseArr["soft_descriptor"];
         $this->redirectUrl = $responseArr["redirect_url"];
-        $this->returnUrl = null; //TODO: Add this
+        $this->returnUrl = ""; //TODO: Add this
         $this->notificationUrls = []; //TODO: Add this
         $this->paymentNotificationUrls = []; //TODO: Add this
         $responseLinks = $responseArr["links"];
