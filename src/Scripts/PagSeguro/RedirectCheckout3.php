@@ -140,13 +140,13 @@ class RedirectCheckout3
             "customer_modifiable":'.!$senderRequired.',
             "additional_amount":'.$additionalAmount.',
             "soft_descriptor":"'.$softDescriptor.'",
-            "redirect_url":"'.$redirectUrl.'",
-            "notification_urls":[
+            "redirect_url":"'.$redirectUrl.'",'
+            .(is_null($notificationUrls) ? '' : '"notification_urls":[
                 '.$notificationUrlsStr.'
-            ],
-            "payment_notification_urls":[
+            ],')
+            .(is_null($paymentNotificationUrls) ? '"payment_notification_urls":[
                 '.$paymentNotificationUrlsStr.'
-            ]}',
+            ]}' : ''),
           'headers' => [
             'Authorization' => 'Bearer '.$creds["token"],
             'Content-type' => 'application/json',
