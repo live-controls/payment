@@ -4,6 +4,7 @@ namespace LiveControls\Payment\Scripts\PagSeguro;
 
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use LiveControls\Payment\Objects\PagSeguro\PaymentItem;
 use LiveControls\Payment\Objects\PagSeguro\PaymentReceiver;
 use LiveControls\Payment\Objects\PagSeguro\PaymentSender;
@@ -68,43 +69,48 @@ class RedirectCheckout3
         $client = static::getClient();
         $host = static::getHost();
         $creds = static::getCredentials();
-        $response = $client->request('POST', $host.'/checkouts', [
-          'body' => '{
-            "reference_id": "'.$reference.'",
-            '.(!is_null($expirationDate) ? '"expiration_date": "'.$expirationDate->toIso8601String().'",' : '').
-            (!is_null($sender) ? '"customer":
-            {
-                "phone":
-                {
-                    "country":"'.$sender->phoneCountry.'",
-                    "area":"'.$sender->phoneDdd.'",
-                    "number":"'.$sender->phone.'"
-                },
-                "Name":"'.$sender->name.'",
-                "email":"'.$sender->email.'",
-                "tax_id":"'.$sender->cpf.'"
-            },' : '').
-            '"items":
-            '.json_encode($items).',
-            '.(is_null($paymentMethods) ? '' : '"payment_methods":
-            '.json_encode($paymentMethods).',').
-            '"discount_amount":'.$discount.',
-            "customer_modifiable":'.!$senderRequired.',
-            "additional_amount":'.$additionalAmount.',
-            "soft_descriptor":"'.$softDescriptor.'",
-            "redirect_url":"'.$redirectUrl.'",'
-            .(is_null($notificationUrls) ? '' : '"notification_urls":
-                '.json_encode($notificationUrls).'
-            ,')
-            .(!is_null($paymentNotificationUrls) ? '"payment_notification_urls":
-                '.json_encode($paymentNotificationUrls).'
-            ' : '').'}',
-          'headers' => [
-            'Authorization' => 'Bearer '.$creds["token"],
-            'Content-type' => 'application/json',
-            'accept' => 'application/json',
-          ],
-        ]);
+        try{
+            $response = $client->request('POST', $host.'/checkouts', [
+                'body' => '{
+                  "reference_id": "'.$reference.'",
+                  '.(!is_null($expirationDate) ? '"expiration_date": "'.$expirationDate->toIso8601String().'",' : '').
+                  (!is_null($sender) ? '"customer":
+                  {
+                      "phone":
+                      {
+                          "country":"'.$sender->phoneCountry.'",
+                          "area":"'.$sender->phoneDdd.'",
+                          "number":"'.$sender->phone.'"
+                      },
+                      "Name":"'.$sender->name.'",
+                      "email":"'.$sender->email.'",
+                      "tax_id":"'.$sender->cpf.'"
+                  },' : '').
+                  '"items":
+                  '.json_encode($items).',
+                  '.(is_null($paymentMethods) ? '' : '"payment_methods":
+                  '.json_encode($paymentMethods).',').
+                  '"discount_amount":'.$discount.',
+                  "customer_modifiable":'.!$senderRequired.',
+                  "additional_amount":'.$additionalAmount.',
+                  "soft_descriptor":"'.$softDescriptor.'",
+                  "redirect_url":"'.$redirectUrl.'",'
+                  .(is_null($notificationUrls) ? '' : '"notification_urls":
+                      '.json_encode($notificationUrls).'
+                  ,')
+                  .(!is_null($paymentNotificationUrls) ? '"payment_notification_urls":
+                      '.json_encode($paymentNotificationUrls).'
+                  ' : '').'}',
+                'headers' => [
+                  'Authorization' => 'Bearer '.$creds["token"],
+                  'Content-type' => 'application/json',
+                  'accept' => 'application/json',
+                ],
+              ]);
+        }catch (\GuzzleHttp\Exception\ClientException $e) {
+            Log::error("[PagSeguro.RedirectCheckout] ".$e->getResponse()->getBody()->getContents());
+            throw new Exception("Internal PagSeguro error!");
+        }
 
 
         if($response->getStatusCode() != 200){
