@@ -137,7 +137,7 @@ class RedirectCheckout3
         }
 
         //Check for links
-        $responseArr = json_decode($response->getBody());
+        $responseArr = json_decode($response->getBody(), true);
         $responseLinks = $responseArr["links"];
         foreach($responseLinks as $link)
         {
