@@ -39,6 +39,15 @@ class RedirectCheckoutData
         $this->customerModifiable = $responseArr["customer_modifiable"];
         $this->items = json_decode($responseArr["items"]);
         $this->additionalAmount = $responseArr["additional_amount"];
+        $this->discountAmount = $responseArr["discount_amount"];
+        $this->shipping = null; //TODO: Add this
+        $this->paymentMethods = null; //TODO: Add this
+        $this->paymentMethodsConfigs = null; //TODO: Add this
+        $this->softDescriptor = $responseArr["soft_descriptor"];
+        $this->redirectUrl = $responseArr["redirect_url"];
+        $this->returnUrl = null; //TODO: Add this
+        $this->notificationUrls = null; //TODO: Add this
+        $this->paymentNotificationUrls = null; //TODO: Add this
         $responseLinks = $responseArr["links"];
         foreach($responseLinks as $link)
         {
@@ -53,7 +62,6 @@ class RedirectCheckoutData
                 $this->inactivateLink = $link["href"];
             }
         }
-        //TODO: Add the rest of the informations
     }
 
     public function checkoutUrl(bool $offline = false)
