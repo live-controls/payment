@@ -38,7 +38,7 @@ class RedirectCheckout3
      */
     private static function getHost():string{
         if(config('app.debug')){
-          return 'https://sandbox.api.pagseguro.com/';
+          return 'https://sandbox.api.pagseguro.com';
         }
         return 'https://api.pagseguro.com';
     }
