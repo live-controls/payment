@@ -37,7 +37,7 @@ class RedirectCheckoutData
         $this->status = $responseArr["status"];
         $this->customer = null; //TODO: Add this
         $this->customerModifiable = $responseArr["customer_modifiable"];
-        $this->items = json_decode($responseArr["items"]);
+        $this->items = $responseArr["items"];
         $this->additionalAmount = $responseArr["additional_amount"];
         $this->discountAmount = $responseArr["discount_amount"];
         $this->shipping = null; //TODO: Add this
