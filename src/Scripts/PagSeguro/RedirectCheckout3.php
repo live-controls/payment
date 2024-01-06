@@ -2,7 +2,9 @@
 
 namespace LiveControls\Payment\Scripts\PagSeguro;
 
+use Carbon\Carbon;
 use Exception;
+use LiveControls\Payment\Objects\PagSeguro\PaymentItem;
 use LiveControls\Payment\Objects\PagSeguro\PaymentReceiver;
 use LiveControls\Payment\Objects\PagSeguro\PaymentSender;
 use LiveControls\Payment\Objects\PagSeguro\RedirectCheckoutData;
@@ -57,49 +59,88 @@ class RedirectCheckout3
      *
      * @return array
      */
-    public static function generateDigitalCode(array $items, PaymentReceiver $receiver, PaymentSender|null $sender, string $reference, string $redirectUrl, array $paymentMethods, int $timeout = 60, int $maxAge = 30, int $maxUses = 1, bool $enableRecover = false, int $discount = 0, bool $senderRequired = false):RedirectCheckoutData|false
+    public static function generateDigitalCode(array $items, PaymentSender|null $sender, string $reference, Carbon|null $expirationDate, string $redirectUrl, array $notificationUrls = [], array $paymentNotificationUrls = [], array|null $paymentMethods = null, int $discount = 0, int $additionalAmount = 0, string $softDescriptor = "", bool $senderRequired = false):RedirectCheckoutData|false
     {
         if($senderRequired && is_null($sender)){
             throw new Exception('$sender is required but it is null!');
         }
+
+        $itemStr = "";
+        foreach($items as $item)
+        {
+            $itemStr .= '{"reference_id":"'.$item->referenceId.'",';
+            $itemStr .= '"name":"'.$item->name.'",';
+            $itemStr .= '"description":"'.$item->description.'",';
+            $itemStr .= '"quantity":'.$item->quantity.',';
+            $itemStr .= '"unit_amount":'.$item->unitAmount.'},';  
+        }
+
+        $paymentMethodsStr = "";
+        foreach($paymentMethods as $pm)
+        {
+            $paymentMethodsStr .= "{";
+            $paymentMethodsStr .= '"type": "'.$pm->type.'",';
+            if(!is_null($pm->brands) && is_array($pm->brands))
+            {
+                $paymentMethodsStr .= '"brands": [';
+                foreach($pm->brands as $pmBrand){
+                    $paymentMethodsStr .= '"'.$pmBrand.'",';
+                }
+                $paymentMethodsStr .= "]";
+            }
+            $paymentMethodsStr .= "},";
+        }
+
+        $notificationUrlsStr = "";
+        foreach($notificationUrls as $nu)
+        {
+            $notificationUrlsStr .= '"'.$nu.'",';
+        }
+
+        $paymentNotificationUrlsStr = "";
+        foreach($paymentNotificationUrls as $pnu)
+        {
+            $paymentNotificationUrlsStr .= '"'.$pnu.'",';
+        }
+
         $client = static::getClient();
         $host = static::getHost();
         $creds = static::getCredentials();
         $response = $client->request('POST', $host.'/checkouts', [
           'body' => '{
-            "customer":
+            "reference_id": "'.$reference.'",
+            '.(!is_null($expirationDate) ? '"expiration_date": "'.$expirationDate->toIso8601String().'",' : '').
+            (!is_null($sender) ? '"customer":
             {
                 "phone":
                 {
-                    "country":"+55",
-                    "area":"27",
-                    "number":"999999999"
+                    "country":"'.$sender->phoneCountry.'",
+                    "area":"'.$sender->phoneDdd.'",
+                    "number":"'.$sender->phone.'"
                 },
-                "Name":"Max",
-                "email":"joao@teste.com",
-                "tax_id":"00000000000"
-            },
-            "items":
-            {
-                "reference_id":"REFERÊNCIA DO PRODUTO",
-                "name":"Test Product",
-                "description":"Description",
-                "quantity":1,
-                "unit_amount":100
-            },
-            "payment_methods":
-            {
-                "type":"CREDIT_CARD"
-            },
-            "discount_amount":1,
-            "reference_id":"1234",
-            "expiration_date":"2023-08-14T19:09:10-03:00",
-            "customer_modifiable":true,
-            "additional_amount":0,
-            "soft_descriptor":"xxxx",
-            "redirect_url":"https://pagseguro.uol.com.br",
-            "notification_urls":["https://pagseguro.uol.com.br"],
-            "payment_notification_urls":"https://pagseguro.uol.com.br"}',
+                "Name":"'.$sender->name.'",
+                "email":"'.$sender->email.'",
+                "tax_id":"'.$sender->cpf.'"
+            },' : '').
+            '"items":
+            [
+                '.$itemStr.'
+            ],
+            '.(is_null($paymentMethods) ? '' : '"payment_methods":
+            [
+                '.$paymentMethodsStr.'
+            ],').
+            '"discount_amount":'.number_format($discount,2,'.','').',
+            "customer_modifiable":'.!$senderRequired.',
+            "additional_amount":'.$additionalAmount.',
+            "soft_descriptor":"'.$softDescriptor.'",
+            "redirect_url":"'.$redirectUrl.'",
+            "notification_urls":[
+                '.$notificationUrlsStr.'
+            ],
+            "payment_notification_urls":[
+                '.$paymentNotificationUrlsStr.'
+            ]}',
           'headers' => [
             'Authorization' => $creds["token"],
             'Content-type' => 'application/json',
@@ -119,12 +160,26 @@ class RedirectCheckout3
      *
      * @return void
      */
-    public static function generatePhysicalCode(array $items, PaymentReceiver|null $receiver, PaymentSender|null $sender, ShippingInformation $shippingInformation, string $reference, string $redirectUrl, int $timeout = 60, int $maxAge = 30, int $maxUses = 1, bool $enableRecover = false, int $discount = 0):array|false
+    public static function generatePhysicalCode(array $items, PaymentSender|null $sender, ShippingInformation $shippingInformation, string $reference, string $redirectUrl, int $timeout = 60, int $maxAge = 30, int $maxUses = 1, bool $enableRecover = false, int $discount = 0):array|false
     {
         throw new Exception('Method not implemented');
     }
 
+    public static function getTransactionInformation(string $transactionCode): array|false{
+        throw new Exception('Method not implemented');
+    }
 
+    public static function getTransactions(Carbon $from, Carbon $to):array{
+
+    }
+
+    public static function reverseTransaction(string $transactionCode, float $amount): bool{
+
+    }
+
+    public static function cancelTransaction(string $transactionCode){
+
+    }
 
 
 }
