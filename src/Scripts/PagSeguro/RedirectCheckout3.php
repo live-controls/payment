@@ -76,31 +76,37 @@ class RedirectCheckout3
         }
 
         $paymentMethodsStr = "";
-        foreach($paymentMethods as $pm)
-        {
-            $paymentMethodsStr .= "{";
-            $paymentMethodsStr .= '"type": "'.$pm->type.'",';
-            if(!is_null($pm->brands) && is_array($pm->brands))
+        if(is_array($paymentMethods)){
+            foreach($paymentMethods as $pm)
             {
-                $paymentMethodsStr .= '"brands": [';
-                foreach($pm->brands as $pmBrand){
-                    $paymentMethodsStr .= '"'.$pmBrand.'",';
+                $paymentMethodsStr .= "{";
+                $paymentMethodsStr .= '"type": "'.$pm->type.'",';
+                if(!is_null($pm->brands) && is_array($pm->brands))
+                {
+                    $paymentMethodsStr .= '"brands": [';
+                    foreach($pm->brands as $pmBrand){
+                        $paymentMethodsStr .= '"'.$pmBrand.'",';
+                    }
+                    $paymentMethodsStr .= "]";
                 }
-                $paymentMethodsStr .= "]";
+                $paymentMethodsStr .= "},";
             }
-            $paymentMethodsStr .= "},";
         }
 
         $notificationUrlsStr = "";
-        foreach($notificationUrls as $nu)
-        {
-            $notificationUrlsStr .= '"'.$nu.'",';
+        if(is_array($notificationUrls)){
+            foreach($notificationUrls as $nu)
+            {
+                $notificationUrlsStr .= '"'.$nu.'",';
+            }
         }
 
         $paymentNotificationUrlsStr = "";
-        foreach($paymentNotificationUrls as $pnu)
-        {
-            $paymentNotificationUrlsStr .= '"'.$pnu.'",';
+        if(is_array($paymentNotificationUrls)){
+            foreach($paymentNotificationUrls as $pnu)
+            {
+                $paymentNotificationUrlsStr .= '"'.$pnu.'",';
+            }
         }
 
         $client = static::getClient();
