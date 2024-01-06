@@ -57,8 +57,11 @@ class RedirectCheckout3
      *
      * @return array
      */
-    public static function generateDigitalCode(array $items, PaymentReceiver $receiver, PaymentSender|null $sender, string $reference, string $redirectUrl, array $paymentMethods, int $timeout = 60, int $maxAge = 30, int $maxUses = 1, bool $enableRecover = false, int $discount = 0):RedirectCheckoutData|false
+    public static function generateDigitalCode(array $items, PaymentReceiver $receiver, PaymentSender|null $sender, string $reference, string $redirectUrl, array $paymentMethods, int $timeout = 60, int $maxAge = 30, int $maxUses = 1, bool $enableRecover = false, int $discount = 0, bool $senderRequired = false):RedirectCheckoutData|false
     {
+        if($senderRequired && is_null($sender)){
+            throw new Exception('$sender is required but it is null!');
+        }
         $client = static::getClient();
         $host = static::getHost();
         $creds = static::getCredentials();
