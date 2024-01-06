@@ -10,12 +10,15 @@ use LiveControls\Payment\Objects\PagSeguro\ShippingInformation;
 use Illuminate\Support\Facades\Log;
 use SimpleXMLElement;
 
+/**
+ * @deprecated 2.0 Outdated API version, Use RedirectCheckout3 to use API version 3
+ * 
+ **/
 class RedirectCheckout{
 
   
     /**
      * Returns an array with 'email' and 'token' depending if the application is in debug mode or not
-     *
      * @return array
      */
     private static function getCredentials():array{
@@ -31,6 +34,11 @@ class RedirectCheckout{
         ];
     }
 
+    /**
+     *
+     * @param boolean $withWs
+     * @return string
+     */
     private static function getHost(bool $withWs = false):string{
       if(config('app.debug')){
         return 'https://'.($withWs ? 'ws.' : '').'sandbox.pagseguro.uol.com.br/v2/';
