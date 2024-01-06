@@ -30,24 +30,24 @@ class RedirectCheckoutData
 
     public function __construct(string $jsonResponse)
     {
-        $responseArr = json_decode($jsonResponse);
+        $responseArr = json_decode($jsonResponse, true);
         $this->id = $responseArr["id"];
         $this->referenceId = $responseArr["reference_id"];
         $this->createdAt = $responseArr["created_at"];
         $this->status = $responseArr["status"];
-        $this->customer = null; //TODO: Add this
+        $this->customer = []; //TODO: Add this
         $this->customerModifiable = $responseArr["customer_modifiable"];
         $this->items = $responseArr["items"];
         $this->additionalAmount = $responseArr["additional_amount"];
         $this->discountAmount = $responseArr["discount_amount"];
-        $this->shipping = null; //TODO: Add this
-        $this->paymentMethods = null; //TODO: Add this
-        $this->paymentMethodsConfigs = null; //TODO: Add this
+        $this->shipping = []; //TODO: Add this
+        $this->paymentMethods = []; //TODO: Add this
+        $this->paymentMethodsConfigs = []; //TODO: Add this
         $this->softDescriptor = $responseArr["soft_descriptor"];
         $this->redirectUrl = $responseArr["redirect_url"];
         $this->returnUrl = null; //TODO: Add this
-        $this->notificationUrls = null; //TODO: Add this
-        $this->paymentNotificationUrls = null; //TODO: Add this
+        $this->notificationUrls = []; //TODO: Add this
+        $this->paymentNotificationUrls = []; //TODO: Add this
         $responseLinks = $responseArr["links"];
         foreach($responseLinks as $link)
         {
