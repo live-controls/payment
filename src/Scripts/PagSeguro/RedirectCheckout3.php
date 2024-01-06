@@ -148,7 +148,7 @@ class RedirectCheckout3
                 '.$paymentNotificationUrlsStr.'
             ]}',
           'headers' => [
-            'Authorization' => $creds["token"],
+            'Authorization' => 'Bearer '.$creds["token"],
             'Content-type' => 'application/json',
             'accept' => 'application/json',
           ],
