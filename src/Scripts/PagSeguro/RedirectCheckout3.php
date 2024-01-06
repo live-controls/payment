@@ -136,7 +136,7 @@ class RedirectCheckout3
             [
                 '.$paymentMethodsStr.'
             ],').
-            '"discount_amount":'.number_format($discount,2,'.','').',
+            '"discount_amount":'.$discount.',
             "customer_modifiable":'.!$senderRequired.',
             "additional_amount":'.$additionalAmount.',
             "soft_descriptor":"'.$softDescriptor.'",
