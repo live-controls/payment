@@ -119,6 +119,36 @@ class RedirectCheckout3
         return new RedirectCheckoutData($response->getBody());
     }
 
+    public static function getCheckoutUrl(string $id): string
+    {
+        $token = static::getCredentials()["token"];
+        $host = static::getHost();
+        $client = static::getClient();
+        $response = $client->request('GET', $host.'/checkouts/'.$id, [
+            'headers' => [
+              'Authorization' => 'Bearer '.$token,
+              'accept' => 'application/json',
+            ],
+        ]);
+
+        if($response->getStatusCode() != 200)
+        {
+            throw new Exception($response->getStatusCode().': '.$response->getBody());
+        }
+
+        //Check for links
+        $responseArr = json_decode($response->getBody());
+        $responseLinks = $responseArr["links"];
+        foreach($responseLinks as $link)
+        {
+            if($link["rel"] == "PAY")
+            {
+                return $link["href"];
+            }
+        }
+        throw new Exception('Payment link not found for Checkout '.$id);
+    }
+
     /**
      * Generates a new checkout code for a physical object (with shipping costs)
      *

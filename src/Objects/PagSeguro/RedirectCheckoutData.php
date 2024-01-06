@@ -2,6 +2,8 @@
 
 namespace LiveControls\Payment\Objects\PagSeguro;
 
+use LiveControls\Payment\Scripts\PagSeguro\RedirectCheckout3;
+
 class RedirectCheckoutData
 {
     public string $id;
@@ -29,5 +31,10 @@ class RedirectCheckoutData
     public function __construct(string $jsonResponse)
     {
         
+    }
+
+    public function checkoutUrl()
+    {
+        return RedirectCheckout3::getCheckoutUrl($this->id);
     }
 }
