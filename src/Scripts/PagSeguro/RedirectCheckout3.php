@@ -65,50 +65,6 @@ class RedirectCheckout3
             throw new Exception('$sender is required but it is null!');
         }
 
-        $itemStr = "";
-        foreach($items as $item)
-        {
-            $itemStr .= '{"reference_id":"'.$item->referenceId.'",';
-            $itemStr .= '"name":"'.$item->name.'",';
-            $itemStr .= '"description":"'.$item->description.'",';
-            $itemStr .= '"quantity":'.$item->quantity.',';
-            $itemStr .= '"unit_amount":'.$item->unitAmount.'},';  
-        }
-
-        $paymentMethodsStr = "";
-        if(is_array($paymentMethods)){
-            foreach($paymentMethods as $pm)
-            {
-                $paymentMethodsStr .= "{";
-                $paymentMethodsStr .= '"type": "'.$pm->type.'",';
-                if(!is_null($pm->brands) && is_array($pm->brands))
-                {
-                    $paymentMethodsStr .= '"brands": [';
-                    foreach($pm->brands as $pmBrand){
-                        $paymentMethodsStr .= '"'.$pmBrand.'",';
-                    }
-                    $paymentMethodsStr .= "]";
-                }
-                $paymentMethodsStr .= "},";
-            }
-        }
-
-        $notificationUrlsStr = "";
-        if(is_array($notificationUrls)){
-            foreach($notificationUrls as $nu)
-            {
-                $notificationUrlsStr .= '"'.$nu.'",';
-            }
-        }
-
-        $paymentNotificationUrlsStr = "";
-        if(is_array($paymentNotificationUrls)){
-            foreach($paymentNotificationUrls as $pnu)
-            {
-                $paymentNotificationUrlsStr .= '"'.$pnu.'",';
-            }
-        }
-
         $client = static::getClient();
         $host = static::getHost();
         $creds = static::getCredentials();
@@ -129,31 +85,27 @@ class RedirectCheckout3
                 "tax_id":"'.$sender->cpf.'"
             },' : '').
             '"items":
-            [
-                '.$itemStr.'
-            ],
+            '.json_encode($items).',
             '.(is_null($paymentMethods) ? '' : '"payment_methods":
-            [
-                '.$paymentMethodsStr.'
-            ],').
+            '.json_encode($paymentMethods).',').
             '"discount_amount":'.$discount.',
             "customer_modifiable":'.!$senderRequired.',
             "additional_amount":'.$additionalAmount.',
             "soft_descriptor":"'.$softDescriptor.'",
             "redirect_url":"'.$redirectUrl.'",'
-            .(is_null($notificationUrls) ? '' : '"notification_urls":[
-                '.$notificationUrlsStr.'
-            ],')
-            .(is_null($paymentNotificationUrls) ? '"payment_notification_urls":[
-                '.$paymentNotificationUrlsStr.'
-            ]}' : ''),
+            .(is_null($notificationUrls) ? '' : '"notification_urls":
+                '.json_encode($notificationUrls).'
+            ,')
+            .(!is_null($paymentNotificationUrls) ? '"payment_notification_urls":
+                '.json_encode($paymentNotificationUrls).'
+            ' : '').'}',
           'headers' => [
             'Authorization' => 'Bearer '.$creds["token"],
             'Content-type' => 'application/json',
             'accept' => 'application/json',
           ],
         ]);
-        
+
 
         if($response->getStatusCode() != 200){
             throw new Exception($response->getStatusCode().': '.$response->getBody());
