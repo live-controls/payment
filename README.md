@@ -8,6 +8,7 @@
 
 ## Requirements
 - PHP 8.0+
+- GuzzleHttp\Guzzle
 
 
 ## Translations
@@ -29,4 +30,9 @@ composer require live-controls/payment
 
 
 ## Usage
-Todo
+### IUGU
+**Warning: No longer updated, but should probably work**
+
+### PagSeguro
+1) Create Token for testing and for production on PagSeguro (If you don't know how, ask PagSeguro)
+
