@@ -26,7 +26,7 @@ composer require live-controls/payment
 
 ### Content
 - Transparent Checkout for IUGU (incl. PaymentItem and PaymentSender classes)
-- Redirect Checkout for PagSeguro (incl. PaymentItem, ShippingInformation, PaymentReceiver and PaymentSender classes)
+- Redirect Checkout for PagSeguro (incl. PaymentItem, ShippingInformation, ~PaymentReceiver~ and PaymentSender classes)
 
 
 ## Usage
