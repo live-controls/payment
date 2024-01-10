@@ -431,7 +431,7 @@ class TransparentCheckout
             ]);
         }else{
             //If the value isn't changed, don't change any items
-            $response = $client->request('POST', 'https://api.iugu.com/v1/invoices/'.$id.'/duplicate?api_token='.$key, [
+            $response = $client->request('POST', 'https://api.iugu.com/v1/invoices/'.$paymentId.'/duplicate?api_token='.$key, [
                 'headers' => [
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
