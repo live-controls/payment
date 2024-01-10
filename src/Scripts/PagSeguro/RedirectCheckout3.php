@@ -5,8 +5,6 @@ namespace LiveControls\Payment\Scripts\PagSeguro;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use LiveControls\Payment\Objects\PagSeguro\PaymentItem;
-use LiveControls\Payment\Objects\PagSeguro\PaymentReceiver;
 use LiveControls\Payment\Objects\PagSeguro\PaymentSender;
 use LiveControls\Payment\Objects\PagSeguro\RedirectCheckoutData;
 use LiveControls\Payment\Objects\PagSeguro\ShippingInformation;
