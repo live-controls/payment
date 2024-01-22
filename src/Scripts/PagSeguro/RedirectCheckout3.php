@@ -21,13 +21,13 @@ class RedirectCheckout3
     private static function getCredentials():array{
         if(config('app.debug')){
             return [
-                'email' => urlencode(env('PAGSEGURO_EMAIL_DEBUG')),
-                'token' => urlencode(env('PAGSEGURO_TOKEN_DEBUG'))
+                'email' => urlencode(config('livecontrols_payment.pagseguro_email_debug',null)),
+                'token' => urlencode(config('livecontrols_payment.pagseguro_token_debug',null))
             ];
         }
         return [
-            'email' => urlencode(env('PAGSEGURO_EMAIL')),
-            'token' => urlencode(env('PAGSEGURO_TOKEN'))
+            'email' => urlencode(config('livecontrols_payment.pagseguro_email',null)),
+            'token' => urlencode(config('livecontrols_payment.pagseguro_token',null))
         ];
     }
 
