@@ -3,7 +3,7 @@
     "license": "MIT",
     "description": "Payment package for live-controls",
     "type": "library",
-    "version": "2.1",
+    "version": "2.1.1",
     "autoload": {
         "psr-4": {
             "LiveControls\\Payment\\": "src/"
