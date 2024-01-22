@@ -185,4 +185,16 @@ class RedirectCheckout3
         $calculatedToken = hash('sha256', $token.'-'.$payload);
         return $calculatedToken == $authenticityToken;
     }
+
+    /**
+     * Compares the signature sent by a webhook with the PagSeguro token
+     *
+     * @param string $payload
+     * @param string $authenticityToken
+     * @return boolean
+     */
+    public static function compareSignatureWithToken(string $payload, string $authenticityToken):bool{
+        $token = static::getCredentials()["token"];
+        return static::compareSignature($token, $payload, $authenticityToken);
+    }
 }
