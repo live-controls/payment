@@ -173,5 +173,8 @@ class RedirectCheckout3
         throw new Exception('Method not implemented');
     }
 
-
+    public static function compareSignature(string $token, string $payload, string $authenticityToken):bool{
+        $calculatedToken = hash('sha256', $token.'-'.$payload);
+        return $calculatedToken == $authenticityToken;
+    }
 }
