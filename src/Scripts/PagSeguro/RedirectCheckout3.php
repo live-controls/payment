@@ -173,6 +173,14 @@ class RedirectCheckout3
         throw new Exception('Method not implemented');
     }
 
+    /**
+     * Compares the signature sent by a webhook
+     *
+     * @param string $token
+     * @param string $payload
+     * @param string $authenticityToken
+     * @return boolean
+     */
     public static function compareSignature(string $token, string $payload, string $authenticityToken):bool{
         $calculatedToken = hash('sha256', $token.'-'.$payload);
         return $calculatedToken == $authenticityToken;
