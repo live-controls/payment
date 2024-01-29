@@ -80,7 +80,7 @@ class RedirectCheckout3
                           "area":"'.$sender->phoneDdd.'",
                           "number":"'.$sender->phone.'"
                       },
-                      "Name":"'.$sender->name.'",
+                      "name":"'.$sender->name.'",
                       "email":"'.$sender->email.'",
                       "tax_id":"'.$sender->cpf.'"
                   },' : '').
@@ -101,8 +101,8 @@ class RedirectCheckout3
                   ' : '').'}',
                 'headers' => [
                   'Authorization' => 'Bearer '.$creds["token"],
-                  'Content-type' => 'application/json',
-                  'accept' => 'application/json',
+                  'Content-Type' => 'application/json',
+                  'Accept' => 'application/json',
                 ],
               ]);
         }catch (\GuzzleHttp\Exception\ClientException $e) {
