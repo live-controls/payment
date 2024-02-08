@@ -68,7 +68,7 @@ class RedirectCheckout3
         $host = static::getHost();
         $creds = static::getCredentials();
         try{
-            $response = $client->request('POST', $host.'/checkouts', [
+            $requestArray = [
                 'body' => '{
                   "reference_id": "'.$reference.'",
                   '.(!is_null($expirationDate) ? '"expiration_date": "'.$expirationDate->toIso8601String().'",' : '').
@@ -104,7 +104,8 @@ class RedirectCheckout3
                   'Content-Type' => 'application/json',
                   'Accept' => 'application/json',
                 ],
-              ]);
+            ];
+            $response = $client->request('POST', $host.'/checkouts', $requestArray);
         }catch (\GuzzleHttp\Exception\ClientException $e) {
             Log::error("[PagSeguro.RedirectCheckout] ".$e->getResponse()->getBody()->getContents());
             throw new Exception("Internal PagSeguro error!");
@@ -113,6 +114,10 @@ class RedirectCheckout3
 
         if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
             throw new Exception($response->getStatusCode().': '.$response->getBody());
+        }
+        if(config('app.debug', false)){
+            Log::debug('[PAGSEGURO REQUEST] '.json_encode($requestArray));
+            Log::debug('[PAGSEGURO RESPONSE] '.$response->getBody());
         }
         return new RedirectCheckoutData($response->getBody());
     }
