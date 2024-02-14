@@ -19,7 +19,7 @@ class RedirectCheckout3
      * @return array
      */
     private static function getCredentials():array{
-        if(config('app.debug')){
+        if(config('livecontrols_payment.debug')){
             return [
                 'email' => urlencode(config('livecontrols_payment.pagseguro_email_debug',null)),
                 'token' => urlencode(config('livecontrols_payment.pagseguro_token_debug',null))
@@ -36,7 +36,7 @@ class RedirectCheckout3
      * @return string PagSeguro Url
      */
     private static function getHost():string{
-        if(config('app.debug')){
+        if(config('livecontrols_payment.debug')){
           return 'https://sandbox.api.pagseguro.com';
         }
         return 'https://api.pagseguro.com';
@@ -115,7 +115,7 @@ class RedirectCheckout3
         if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
             throw new Exception($response->getStatusCode().': '.$response->getBody());
         }
-        if(config('app.debug', false)){
+        if(config('livecontrols_payment.debug')){
             Log::debug('[PAGSEGURO REQUEST] '.json_encode($requestArray));
             Log::debug('[PAGSEGURO RESPONSE] '.$response->getBody());
         }
