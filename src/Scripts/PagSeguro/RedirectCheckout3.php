@@ -115,7 +115,7 @@ class RedirectCheckout3
         if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
             throw new Exception($response->getStatusCode().': '.$response->getBody());
         }
-        if(config('livecontrols_payment.debug')){
+        if(config('livecontrols_payment.debug') || config('livecontrols_payment.logging')){
             Log::debug('[PAGSEGURO REQUEST] '.json_encode($requestArray));
             Log::debug('[PAGSEGURO RESPONSE] '.$response->getBody());
         }
